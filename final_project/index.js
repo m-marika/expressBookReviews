@@ -34,37 +34,6 @@ app.use("/customer/auth/*", function auth(req,res,next){
       }
 });
 
-app.post("/login", (req, res) => {
-    const { username, password } = req.body;
-  
-    if (!username || !password) {
-      return res.status(404).json({ message: "Error logging in" });
-    }
-  
-    if (authenticatedUser(username, password)) {
-      const accessToken = jwt.sign({ data: username }, 'access', { expiresIn: 60 * 60 });
-  
-      req.session.authorization = { accessToken, username };
-      return res.status(200).send("User successfully logged in");
-    } else {
-      return res.status(208).json({ message: "Invalid Login. Check username and password" });
-    }
-  });
-  
-  app.post("/register", (req, res) => {
-    const { username, password } = req.body;
-  
-    if (username && password) {
-      if (!doesExist(username)) {
-        users.push({ username, password });
-        return res.status(200).json({ message: "User successfully registered. Now you can login" });
-      } else {
-        return res.status(404).json({ message: "User already exists!" });
-      }
-    } 
-    return res.status(404).json({ message: "Unable to register user." });
-  });
- 
 const PORT =5000;
 
 app.use("/customer", customer_routes);
